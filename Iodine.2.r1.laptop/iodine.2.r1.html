@@ -1,0 +1,381 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iodine II</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: url('assets/background.gif') no-repeat center center/cover; 
+            background-color: #0b0713;
+            position: relative;
+        }
+
+        .desktop-environment {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .top-right-img {
+            position: absolute;
+            top: 45%;
+            right: 25px;
+            transform: translateY(-50%);
+            width: 250px;
+        }
+
+        .top-right-center {
+            position: absolute;
+            top: 8%;
+            right: 25px;
+            transform: translateY(-50%);
+            width: 250px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .mock-ad-space {
+            background: rgba(18, 18, 24, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        .ad-inverted-l-container {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            right: 300px;
+            bottom: 65px;
+            z-index: 10;
+        }
+
+        .ad-leaderboard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 90px;
+        }
+
+        .ad-skyscraper {
+            position: absolute;
+            top: 105px;
+            left: 0;
+            width: 130px;
+            bottom: 0;
+        }
+
+        #app-viewport {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: none;
+        }
+
+        .taskbar-container {
+            position: fixed;
+            bottom: 12.5px;
+            left: 12.5px;
+            z-index: 9999;
+        }
+
+        .status-container {
+            position: fixed;
+            bottom: 12.5px;
+            right: 25px;
+            z-index: 9999;
+            gap: 8.1px;
+            padding: 0 13px;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .taskbar, .status-container {
+            height: 36px;
+            background: rgba(18, 18, 24, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .taskbar {
+            gap: 6.25px;
+            padding: 0 5px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0 6.25px;
+            border-radius: 8.1px;
+            height: 26px;
+            min-width: 26px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+        }
+
+        .nav-btn img {
+            width: 17.8px;
+            height: 17.8px;
+            object-fit: contain;
+        }
+
+        .nav-btn .tab-text {
+            max-width: 0;
+            opacity: 0;
+            white-space: nowrap;
+            transition: max-width 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+            font-size: 10.6px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 26px;
+            padding: 0 13px;
+        }
+
+        .nav-btn.active .tab-text {
+            max-width: 81.25px;
+            opacity: 1;
+            margin-left: 6.25px;
+        }
+
+        .battery-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #4cd964;
+            color: #000000;
+            font-weight: bold;
+            font-size: 9.3px;
+            padding: 2px 5px;
+            border-radius: 5px;
+            min-width: 31.25px;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img class="top-right-center" src="assets/Iodine.png" alt="If you see this, something is wrong with Iodine">
+    
+    <div id="welcome-container" class="container">
+     <img src="assets/Update1.png" class="top-right-img" alt="If you see this, something is wrong with Iodine">
+    </div>
+
+    <div id="homepage-ads" class="ad-inverted-l-container">
+        <div class="mock-ad-space ad-leaderboard">Lucky you! No ads right now</div>
+        <div class="mock-ad-space ad-skyscraper">Lucky you!<br>No ads right now</div>
+    </div>
+
+    <div class="desktop-environment">
+        <iframe id="app-viewport" frameborder="0"></iframe>
+    </div>
+
+    <div class="taskbar-container">
+        <div class="taskbar">
+            
+            <button class="nav-btn active" data-app="welcome">
+                <img src="assets/welcome.png" alt="Welcome">
+                <span class="tab-text">Welcome</span>
+            </button>
+
+            <button class="nav-btn" data-app="assets/games.html">
+                <img src="assets/games.png" alt="Games">
+                <span class="tab-text">Games</span>
+            </button>
+
+            <button class="nav-btn" data-app="assets/apps.html">
+                <img src="assets/apps.png" alt="Apps">
+                <span class="tab-text">Apps</span>
+            </button>
+
+            <button class="nav-btn" data-app="assets/movies.html">
+                <img src="assets/movies.png" alt="Movies">
+                <span class="tab-text">Movies</span>
+            </button>
+
+            <button class="nav-btn" data-app="assets/tv.html">
+                <img src="assets/tv.png">
+                <span class="tab-text">TV</span>
+            </button>
+
+            <button class="nav-btn" data-app="assets/proxy.html">
+                <img src="assets/proxy.png" alt="Proxy">
+                <span class="tab-text">Proxy</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="status-container">
+        <div id="battery-display" class="battery-pill">--%</div>
+        <div id="clock-display">00:00</div>
+    </div>
+
+    <script>
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const appViewport = document.getElementById('app-viewport');
+        const welcomeContainer = document.getElementById('welcome-container');
+        const homepageAds = document.getElementById('homepage-ads');
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const targetApp = btn.getAttribute('data-app');
+
+                if (targetApp === 'welcome') {
+                    appViewport.style.display = 'none';
+                    appViewport.src = '';
+                    welcomeContainer.style.display = 'block';
+                    homepageAds.style.display = 'block';
+                } else {
+                    welcomeContainer.style.display = 'none';
+                    homepageAds.style.display = 'none';
+                    appViewport.src = targetApp;
+                    appViewport.style.display = 'block';
+                }
+            });
+        });
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('clock-display').innerText = hours + ':' + minutes;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        if (navigator.getBattery) {
+            navigator.getBattery().then(battery => {
+                function updateBattery() {
+                    const level = Math.floor(battery.level * 100);
+                    const pill = document.getElementById('battery-display');
+                    pill.innerText = level + '%';
+                    if (level <= 20) {
+                        pill.style.backgroundColor = '#ff3b30';
+                    } else if (level <= 50) {
+                        pill.style.backgroundColor = '#ffcc00';
+                    } else {
+                        pill.style.backgroundColor = '#4cd964';
+                    }
+                }
+                updateBattery();
+                battery.addEventListener('levelchange', updateBattery);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const buttons = document.querySelectorAll(".nav-btn");
+            const viewport = document.getElementById("app-viewport");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    if (button.classList.contains("active")) return;
+
+                    document.querySelector(".nav-btn.active")?.classList.remove("active");
+                    button.classList.add("active");
+
+                    const appUrl = button.getAttribute("data-app");
+                    if (appUrl === "welcome") {
+                        viewport.style.display = "none";
+                        viewport.src = "about:blank";
+                    } else if (appUrl) {
+                        viewport.src = appUrl;
+                        viewport.style.display = "block";
+                    }
+                });
+            });
+
+            function updateClock() {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                
+                hours = hours % 12;
+                hours = hours ? hours : 12; 
+                
+                document.getElementById("clock-display").textContent = `${hours}:${minutes}`;
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            function updateBatteryUI(battery) {
+                const percentage = Math.round(battery.level * 100);
+                const pill = document.getElementById("battery-display");
+                
+                pill.textContent = `${percentage}%`;
+
+                if (battery.charging) {
+                    pill.style.backgroundColor = "#34aadc"; 
+                } else if (percentage <= 20) {
+                    pill.style.backgroundColor = "#ff3b30"; 
+                } else {
+                    pill.style.backgroundColor = "#4cd964"; 
+                }
+            }
+
+            if (navigator.getBattery) {
+                navigator.getBattery().then(battery => {
+                    updateBatteryUI(battery);
+                    battery.addEventListener('levelchange', () => updateBatteryUI(battery));
+                    battery.addEventListener('chargingchange', () => updateBatteryUI(battery));
+                });
+            } else {
+                document.getElementById("battery-display").textContent = "100%";
+            }
+        });
+    </script>
+</body>
+</html>

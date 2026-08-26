@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iodine Video Player</title>
+<style>
+  @font-face {
+    font-family: 'Canva Sans';
+    src: url('CanvaSans-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .top-right-center {
+      position: absolute;
+      top: 8%;
+      right: 25px;
+      transform: translateY(-50%);
+      width: 250px;
+      display: flex;
+      justify-content: flex-end;
+      z-index: 10;
+  }
+
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Canva Sans', sans-serif;
+    overflow: hidden;
+  }
+  
+  .bg-img {
+    position: fixed;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-image: url('background.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(8px);
+    z-index: -1;
+  }
+  
+  .content {
+    color: white;
+    box-sizing: border-box;
+    padding: 20px 20px 0 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+
+  .content h1 {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .vlc-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    margin-top: 5px;
+    height: calc(100vh - 120px); 
+  }
+
+  .controls-bar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .domain-select {
+    width: 200px;
+    padding: 10px 35px 10px 12px;
+    font-size: 15px;
+    font-family: 'Canva Sans', sans-serif;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 14px) center;
+  }
+
+  .domain-select option {
+    background: #1a1a1a;
+    color: white;
+  }
+
+  .play-btn {
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Canva Sans', sans-serif;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .play-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .domain-select:focus {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  .player-panel {
+    width: 100%;
+    flex: 1; 
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    margin-bottom: 55px; 
+  }
+
+  .player-panel iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+  }
+
+  .player-panel iframe.active {
+    display: block;
+  }
+
+  .placeholder-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    text-align: center;
+    position: absolute;
+    max-width: 80%;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <img class="top-right-center" src="Iodine.png" alt="If you see this, something is wrong with Iodine">
+<div class="bg-img"></div>
+
+<div class="content">
+  <h1>Iodine Proxy Center</h1>
+  
+  <div class="vlc-layout">
+    
+    <div class="controls-bar">
+      <select id="domainSelect" class="domain-select">
+        <option value="gust.html" selected>Gust</option>
+        <option value="helios.html">Helios</option>
+        <option value="sandstone.html">Sandstone</option>
+        <option value="corrosion.html">Corrosion</option>
+      </select>
+      <button id="fsBtn" class="play-btn">Fullscreen</button>
+    </div>
+    
+    <div class="player-panel" id="playerPanel">
+      <div class="placeholder-text" id="placeholder">Loading proxy...</div>
+      <iframe id="videoPlayer" allowfullscreen></iframe>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const domainSelect = document.getElementById('domainSelect');
+  const fsBtn = document.getElementById('fsBtn');
+  const videoPlayer = document.getElementById('videoPlayer');
+  const placeholder = document.getElementById('placeholder');
+
+  function updateProxyFrame() {
+    const chosenProxy = domainSelect.value;
+    if (!chosenProxy) return;
+    placeholder.style.display = 'none';
+    videoPlayer.src = chosenProxy;
+    videoPlayer.classList.add('active');
+  }
+
+  function toggleFullscreen() {
+    if (videoPlayer.classList.contains('active')) {
+      if (videoPlayer.requestFullscreen) {
+        videoPlayer.requestFullscreen();
+      } else if (videoPlayer.webkitRequestFullscreen) {
+        videoPlayer.webkitRequestFullscreen();
+      } else if (videoPlayer.msRequestFullscreen) {
+        videoPlayer.msRequestFullscreen();
+      }
+    }
+  }
+
+  domainSelect.addEventListener('change', updateProxyFrame);
+  fsBtn.addEventListener('click', toggleFullscreen);
+
+  window.addEventListener('DOMContentLoaded', updateProxyFrame);
+</script>
+</body>
+</html>
